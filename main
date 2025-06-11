@@ -1,8 +1,6 @@
-from Demos.SystemParametersInfo import new_h
 from openpyxl import load_workbook
 import os
 
-from pywin.Demos.cmdserver import flags
 
 wb = load_workbook("2.xlsx")
 sheet = wb["Sheet1"]
@@ -12,17 +10,23 @@ list = []
 for row in sheet['A2':'C22']:
     str = ''
     for cell in row:
-        print(cell.coordinate, cell.value)  # 打印坐标和值（证据14）
+        #print(cell.coordinate, cell.value)  # 打印坐标和值（证据14）
         str += cell.value
     pingzheng = str[13:18]
-    print(pingzheng)
+    #print(pingzheng)
     list.append(str)
 
-
-print(list)
+#print(list)
+my_list = []
+for i in list:
+    temp = i[13:18]
+    my_list.append((temp,i))
+#print(my_list)
+dict =dict(my_list)
+print(dict)
 
 # 设定源目录
-source_dir = '11'
+source_dir = '33'
 
 # 列出所有文件夹
 folders = [f for f in os.listdir(source_dir) if os.path.isdir(os.path.join(source_dir, f))]
@@ -30,17 +34,16 @@ folders = [f for f in os.listdir(source_dir) if os.path.isdir(os.path.join(sourc
 # 遍历文件夹并重命名
 for folder in folders:
     old_name = os.path.join(source_dir, folder)
-    print(old_name)
+    #print(old_name)
     flag = old_name[19:]
-    print(flag)
-    for i in list:
-        temp = i[13:18]
-        if flag == temp:
-            new_name = os.path.join(source_dir,f'{i}')
-            os.rename(old_name,new_name)
-            print(f'Renamed "{folder}" to "{os.path.basename(new_name)}"')
-        else:
-            print(f'"{old_name}"没有对应凭证')
-    #new_name = os.path.join(source_dir, f'new_name_{folder}')  # 自定义新的文件夹名
-    #os.rename(old_name, new_name)
-    #
+    #print(flag)
+    if flag in dict:
+        new_name = dict[flag]
+        #print(new_name)
+        new_name = os.path.join(source_dir, f'{new_name}')
+        os.rename(old_name, new_name)
+        print(f'Renamed "{folder}" to "{os.path.basename(new_name)}"')
+
+    else:
+        print(f'"{old_name}"没有对应凭证')
+
